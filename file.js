@@ -1,3 +1,4 @@
+"use strict";
 
 (function($) {
     // значения по умолчанию
@@ -23,8 +24,11 @@
         options = $.extend({}, defaults, options, params);
 
         let rootElement = this;
-
-
+        
+        let view = new View(options, rootElement)
+        view.createSlider();
+        view.addListeners(view);
+    }
         //model
         //здесь хранятся: минимальное и максимальное значение величины, 
         //начало и конце диапазона величины (по умолчанию)
@@ -38,7 +42,9 @@
 
         //view        
 
-        function view(mode, relativePosition) {
+
+
+        /*function view(mode, relativePosition) {
             //mode: init, rebase
             
             switch (mode) {
@@ -94,7 +100,7 @@
             view('init', calcCoordinateThumb())            
         }
         
-        init();
+        //init();
 
         function repaint(currenPosition) {
             //расчет начальной конфигурации,
@@ -176,7 +182,7 @@
             //сделать передатчик данных из слайдера
 
 
-    };
+    };*/
 })(jQuery);
 
 $(document).ready(function() {
