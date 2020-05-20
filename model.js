@@ -1,19 +1,34 @@
 'use strict';
 class Model {
-    constructor() {
+    constructor(options) {
         //массив данных с абсолютынми значениями
         this.minValue;
         this.maxValue;
         this.startRange;
         this.endRange;
         this.sliderScale = calcSliderScale();
+        
+        //установка внешних слушателей
+        if (options.inputStart) {
+            setExternalListener(options.inputStart);
+        }
+
+        if (options.inputEnd) {
+            setExternalListener(options.inputEnd);
+        }
 
         //функция расчета шкалы слайдера (числовые значения)
         function calcSliderScale() {
-
+            let sliderScale = {};
             return sliderScale;
         };
 
+        //функция установки внешних слушателей
+        function setExternalListener(input) {
+            input.change(function() {
+                console.log(this.value)
+            })
+        }
     }
 
     getCurrentValue() {
