@@ -7,8 +7,32 @@
 
 class Presenter {
 
-    constructor() {
+    constructor(model, view) {
 
+        setViewListener();
+
+        //в конструкторе - функции однократного вызова
+        function viewToPresenterTransfer() {
+            let result = view.getCurrentPosition();
+            
+            //this.relativeToAbsoluteDataConverter(result);            
+        }
+        //вызов функции по
+
+        function setViewListener() {
+            view.addListeners(view, viewToPresenterTransfer);
+        }
+        
+    }
+
+    // в методах презентера - функции многократного вызова
+    relativeToAbsoluteDataConverter(currentPosition) {
+        console.log(currentPosition);
+        this.presenterToModelTransfer(); 
+    }
+
+    presenterToModelTransfer() {
+        
     }
 
     changeViewListener() {
