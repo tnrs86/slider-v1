@@ -12,6 +12,7 @@ class View {
         this.rootElement = rootElement;
         this.thumbIsPressed = false;
         this.verticalView = options.verticalView;
+        
         createInterface(this);
 
         //построение нового экземпляра слайдера
@@ -39,13 +40,9 @@ class View {
         
     }
 
-    //Блок создания интерфейса
-    addListeners(view, func) {
-        //метод, устанавливающий слушателей на необходимые объекты
-        /*this.track.setListener(parent, func);        
-        this.leftThumb.setListener(parent);
-        this.rightThumb.setListener(parent);*/
-        view.track.setListener(view, func);        
+    //Блок создания интерфейса - метод использует Presenter
+    addListeners(view, func, modulesBounds) {
+        view.track.setListener(view, func, modulesBounds);        
         view.leftThumb.setListener(view);
         view.rightThumb.setListener(view);
     }
@@ -73,12 +70,14 @@ class View {
             //начало и ширина трека слайдера
             //координата левой пули
             //координата правой пули
-        
-        let currentPosition = [2];
+
+        //let currentPosition = [2];
+        let currentPosition = {};
         let leftSlider = 0;
         let widthSlider = 0;
         let leftThumbLeft = 0;
         let rightThumbLeft = 0;
+        
         if (!this.verticalView) {
             leftSlider = this.slider.jqObject.offset().left;
             widthSlider = this.slider.jqObject.width();
@@ -91,16 +90,16 @@ class View {
             rightThumbLeft = this.rightThumb.jqObject.offset().top;
         }
         
-        currentPosition[0] = (leftThumbLeft - leftSlider) / widthSlider;
-        currentPosition[1] = (rightThumbLeft - leftSlider) / widthSlider;
-        
-        
+        //currentPosition[0] = (leftThumbLeft - leftSlider) / widthSlider;
+        //currentPosition[1] = (rightThumbLeft - leftSlider) / widthSlider;        
+        currentPosition[this.rightThumb.name] = (rightThumbLeft - leftSlider) / widthSlider; 
 
         return currentPosition;
     }
 
-    setCurrentPosition() {
-
+    setCurrentPosition(extValue) {
+        
+        this.rightThumb.jqObject.css('left', extValue * 100 + '%');
     }
 }
 
@@ -149,25 +148,30 @@ class Track {
         this.html = `<div class="${className}"></div>`;
         this.jqObject = $(this.html);
     }
-
+    // parent здесь - это ссылка на текущий экземпляр класса View
     addToPage(parent) {
         $(parent).append(this.jqObject);
     }
 
-    setListener (parent, func) {
+    setListener (parent, func, modulesBounds) {
         
         this.jqObject.mousemove(function(event){
             
             if (parent.thumbIsPressed) {
-                //вызов вункции в presenter
-                func(event.pageX);
+                //перемещение пули                
+                parent.rightThumb.jqObject.offset({left:event.pageX})
+                //вызов функции в presenter                
+                func(modulesBounds);
             }
             //передача данных в Presenter перемещение курсора
         })
 
-        this.jqObject.mouseout(function(){
-            
-            
+        this.jqObject.mouseleave(function() {
+            parent.thumbIsPressed = false;
+        })
+
+        this.jqObject.mouseup(function() {
+            parent.thumbIsPressed = false;
         })
 
         this.jqObject.click(function(){
@@ -178,7 +182,6 @@ class Track {
     }   
 
 }
-
 
 class Thumb {
 
@@ -207,6 +210,11 @@ class Thumb {
             //передача данных в Presenter (нажата пуля)                      
         })
 
+        /*this.jqObject.mouseout(function(){
+            parent.thumbIsPressed = false;
+            
+        })*/
+
         this.jqObject.mouseup(function(){
             parent.thumbIsPressed = false;
             //передача данных в Presenter (нажата пуля)
@@ -219,7 +227,6 @@ class Thumb {
     }
 
 }
-
 
 class Filler {
     constructor(name, classModificator) {
