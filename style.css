@@ -1,6 +1,7 @@
 .slider {
     width: 100%;
     position: relative;
+    margin-left: 20px;
 }
 
 .slider-track {
@@ -9,7 +10,7 @@
     background-color: red;
 }
 
-.bullit {    
+.thumb {    
     position: absolute;
     top: 0px;
     width: 10px;
@@ -17,6 +18,15 @@
     border-radius: 50%;
     background-color: indigo;
     z-index: 10;
+}
+
+.left-thumb {
+    left: 0px;
+}
+
+.right-thumb {
+    left: 50%;
+
 }
 
 .filler {
